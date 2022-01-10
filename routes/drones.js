@@ -30,7 +30,7 @@ router.post('/drones/create', async (req, res, next) => {
     await Drone.create(req.body);
     res.redirect("/drones");
   } catch (err) {
-    res.redirect("/drones/create");
+    next(err);
   }
 });
 
@@ -56,9 +56,15 @@ router.post('/drones/:id/edit', async (req, res, next) => {
   }
 });
 
-router.post('/drones/:id/delete', (req, res, next) => {
+router.post('/drones/:id/delete', async (req, res, next) => {
   // Iteration #5: Delete the drone
   // ... your code here
+  try {
+    await Drone.findByIdAndDelete(req.params.id);
+    res.redirect("/drones");
+  } catch (err) {
+    next(err)
+  }
 });
 
 module.exports = router;
